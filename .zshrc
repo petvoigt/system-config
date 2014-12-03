@@ -118,7 +118,7 @@ fi
 # Colors and aliases for ls and grep.
 if [[ `uname` == "Linux" ]] ; then
   alias ls="ls --color=auto"
-elif [[ `uname` = "FreeBSD" ]] ; then
+elif [[ `uname` == "FreeBSD" ]] ; then
   alias ls="ls -G"
   # export CLICOLOR=yes # Alternative for line above
   if [[ -x "$(which gnuls)" ]] ; then
