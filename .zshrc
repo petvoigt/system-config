@@ -1,7 +1,7 @@
 #
 # ~/.zshrc
 #
-# Last changes - Dr. Peter Voigt - 2014-12-02
+# Last changes - Dr. Peter Voigt - 2014-12-03
 #
 
 # History settings.
@@ -24,7 +24,7 @@ bindkey -e
 # Useful command to list current key bindings:
 # bindkey
 # Some key bindings for Linux and Tmux.
-if [ `uname` = "Linux" ] ; then
+if [[ `uname` == "Linux" ]] ; then
   # Cursor block del key.
   bindkey "\e[3~" delete-char
   # Cursor block end key.
@@ -33,7 +33,7 @@ if [ `uname` = "Linux" ] ; then
   bindkey "\e[F"  end-of-line
 fi
 # Some key bindings for FreeBSD and Tmux.
-if [ `uname` = "FreeBSD" ] ; then
+if [[ `uname` == "FreeBSD" ]] ; then
   # Cursor block del key.
   bindkey "\e[3~" delete-char
   # Cursor block end key.
@@ -63,7 +63,7 @@ zmodload -i zsh/complist
 zstyle ":completion:*" menu select
 
 # Use colored completions with LS_COLORS.
-if [ -x "$(which dircolors)" ] ; then
+if [[ -x "$(which dircolors)" ]] ; then
   eval $(dircolors)
   zstyle ":completion:*" list-colors ${(s.:.)LS_COLORS}
 fi
@@ -106,22 +106,22 @@ autoload -U promptinit && promptinit
 # prompt -c # show currently selected theme
 # prompt -l # show available themes
 
-# Append $HOME/bin to PATH if not already done so.
-echo $PATH |grep $HOME/bin > /dev/null
-if [ $? = 0 ] ; then
+# Append ~/bin to PATH if not already done so.
+echo $PATH |grep ~/bin > /dev/null
+if [[ $? -eq 0 ]] ; then
   echo "INFO: PATH is already containing $HOME/bin."
-elif [ $? = 1 ] ; then
+elif [[ $? -eq 1 ]] ; then
   echo "INFO: Appending $HOME/bin to PATH."
-  PATH=$PATH:$HOME/bin; export PATH
+  PATH=$PATH:~/bin; export PATH
 fi
 
 # Colors and aliases for ls and grep.
-if [ `uname` = "Linux" ] ; then
+if [[ `uname` == "Linux" ]] ; then
   alias ls="ls --color=auto"
-elif [ `uname` = "FreeBSD" ] ; then
+elif [[ `uname` = "FreeBSD" ]] ; then
   alias ls="ls -G"
   # export CLICOLOR=yes # Alternative for line above
-  if [ -x "$(which gnuls)" ] ; then
+  if [[ -x "$(which gnuls)" ]] ; then
     alias ls="gnuls --color"
   fi
 fi
@@ -134,7 +134,7 @@ alias ll="ls -alF"
 alias dir="ls -al"
 
 # Locale settings.
-if [ "$USER" = "root" ] ; then
+if [[ "$USER" == "root" ]] ; then
   export LANG=POSIX
   export LANGUAGE=$LANG
   export LC_CTYPE=en_US.UTF-8
@@ -147,12 +147,12 @@ fi
 export PRINTER="laser"
 
 # Python startup.
-export PYTHONSTARTUP="$HOME/python_startup.py"
+export PYTHONSTARTUP=~/python_startup.py
 
 # Default prompt color."
 prompt_color=blue
 # User specific prompt colors.
-if [ -r ~/.prompt_colors ] ; then
+if [[ -r ~/.prompt_colors ]] ; then
   echo "INFO: Reading user specific prompt colors."
   source ~/.prompt_colors
 else
@@ -162,18 +162,18 @@ fi
 PROMPT="%{$fg_bold[$prompt_color]%}[%n@%m %~]%#%{$reset_color%} "
 
 # Lynx.
-export LYNX_CFG=$HOME/.lynx.cfg
+export LYNX_CFG=~/.lynx.cfg
 
 # User specific aliases.
-if [ "$USER" = "pvoigt" ] ; then
-  alias reg.pl=$HOME/ct-ix/reg.pl
-  export HEISE=$HOME/ct-ix/inhalt.frm
+if [[ "$USER" == "pvoigt" ]] ; then
+  alias reg.pl=~/ct-ix/reg.pl
+  export HEISE=~/ct-ix/inhalt.frm
   alias gnus="emacs --geometry 80x40 -rv --no-splash -f gnus"
 fi
 
 # Linux specific aliases.
-if [ `uname` = "Linux" ] ; then
-  if [ "$USER" = "root" ] ; then
+if [[ `uname` == "Linux" ]] ; then
+  if [[ "$USER" == "root" ]] ; then
     alias mnt_crypt_home="~root/bin/mnt_crypt.sh crypt.home"
     alias umnt_crypt_home="~root/bin/umnt_crypt.sh crypt.home"
     alias mnt_crypt_data="~root/bin/mnt_crypt.sh crypt.data"
@@ -188,8 +188,8 @@ if [ `uname` = "Linux" ] ; then
 fi
 
 # FreeBSD specific aliases
-if [ `uname` = "FreeBSD" ] ; then
-  if [ "$USER" = "root" ] ; then
+if [[ `uname` == "FreeBSD" ]] ; then
+  if [[ "$USER" == "root" ]] ; then
     alias mnt_geli_home="~root/bin/mnt_geli.sh crypt.home"
     alias umnt_geli_home="~root/bin/umnt_geli.sh crypt.home"
     alias mnt_geli_data="~root/bin/mnt_geli.sh crypt.data"
@@ -198,9 +198,9 @@ if [ `uname` = "FreeBSD" ] ; then
 fi
 
 # Environment variables of gpg-agent.
-if [ -f $HOME/.gnupg/agent.info ] ; then
+if [[ -r ~/.gnupg/agent.info ]] ; then
   echo "INFO: Reading file $HOME/.gnupg/agent.info."
-  . $HOME/.gnupg/agent.info
+  source ~/.gnupg/agent.info
   export GPG_AGENT_INFO
   export SSH_AUTH_SOCK
   export SSH_AGENT_PID
@@ -213,13 +213,13 @@ fi
 # Greeting.
 ls -al
 echo
-echo Hello $USER, settings are: SHELL=$SHELL, TERM=$TERM, LANG=$LANG.
+echo Hello $USER, settings are: SHELL=$SHELL, TTY=$TTY, TERM=$TERM, LANG=$LANG.
 echo
 who -H -u
 echo
-if [ "$USER" = "pvoigt" ] ; then
-  if [ "$TERM" = "xterm" -o "$TERM" = "rxvt" ] ; then
-    if [ -x "$(which xhost)" ] ; then
+if [[ "$USER" == "pvoigt" ]] ; then
+  if [[ "$TERM" == "xterm" || "$TERM" == "rxvt" ]] ; then
+    if [[ -x "$(which xhost)" ]] ; then
       xhost +
     fi
     echo
