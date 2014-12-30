@@ -1,7 +1,7 @@
 #
 # ~/.zshrc
 #
-# Last changes - Dr. Peter Voigt - 2014-12-03
+# Last changes - Dr. Peter Voigt - 2014-12-29
 #
 
 # History settings.
@@ -149,7 +149,7 @@ export PRINTER="laser"
 # Python startup.
 export PYTHONSTARTUP=~/python_startup.py
 
-# Default prompt color."
+# Default prompt color.
 prompt_color=blue
 # User specific prompt colors.
 if [[ -r ~/.prompt_colors ]] ; then
@@ -184,10 +184,14 @@ if [[ `uname` == "Linux" ]] ; then
     alias umnt_crypt_extern3="~root/bin/umnt_crypt.sh crypt.extern3"
     alias mnt_crypt_extern4="~root/bin/mnt_crypt.sh crypt.extern4"
     alias umnt_crypt_extern4="~root/bin/umnt_crypt.sh crypt.extern4"
+    alias mnt_tcrypt_pv_address="~root/bin/mnt_tcrypt.sh tcrypt.pv_address"
+    alias umnt_tcrypt_pv_address="~root/bin/umnt_tcrypt.sh tcrypt.pv_address"
+    alias mnt_tcrypt_vog_tcvol="~root/bin/mnt_tcrypt.sh tcrypt.vog_tcvol"
+    alias umnt_tcrypt_vog_tcvol="~root/bin/umnt_tcrypt.sh tcrypt.vog_tcvol"
   fi
 fi
 
-# FreeBSD specific aliases
+# FreeBSD specific aliases.
 if [[ `uname` == "FreeBSD" ]] ; then
   if [[ "$USER" == "root" ]] ; then
     alias mnt_geli_home="~root/bin/mnt_geli.sh crypt.home"
