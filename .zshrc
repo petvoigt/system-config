@@ -1,7 +1,7 @@
 #
 # ~/.zshrc
 #
-# Last changes - Dr. Peter Voigt - 2014-12-29
+# Last changes - Dr. Peter Voigt - 2015-07-13
 #
 
 # History settings.
@@ -198,6 +198,10 @@ if [[ `uname` == "FreeBSD" ]] ; then
     alias umnt_geli_home="~root/bin/umnt_geli.sh crypt.home"
     alias mnt_geli_data="~root/bin/mnt_geli.sh crypt.data"
     alias umnt_geli_data="~root/bin/umnt_geli.sh crypt.data"
+    alias mnt_geli_zhome="~root/bin/mnt_geli.sh crypt.zhome"
+    alias umnt_geli_zhome="~root/bin/umnt_geli.sh crypt.zhome"
+    alias mnt_geli_zdata="~root/bin/mnt_geli.sh crypt.zdata"
+    alias umnt_geli_zdata="~root/bin/umnt_geli.sh crypt.zdata"
   fi
 fi
 
@@ -213,6 +217,13 @@ if [[ -r ~/.gnupg/agent.info ]] ; then
   echo "INFO: SSH_AGENT_PID=$SSH_AGENT_PID."
   echo
 fi
+
+# Terminal title as <user>@<host>: <current_directory>.
+case $TERM in
+  xterm*)
+    precmd () {print -Pn "\e]0;%n@%m: %~\a"}
+    ;;
+esac
 
 # Greeting.
 ls -al
