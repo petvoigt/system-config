@@ -1,7 +1,7 @@
 #
 # ~/.zshrc
 #
-# Last changes - Dr. Peter Voigt - 2015-07-13
+# Last changes - Dr. Peter Voigt - 2017-09-18
 #
 
 # History settings.
@@ -107,7 +107,7 @@ autoload -U promptinit && promptinit
 # prompt -l # show available themes
 
 # Append ~/bin to PATH if not already done so.
-echo $PATH |grep ~/bin > /dev/null
+echo "$PATH" |grep ~/bin > /dev/null
 if [[ $? -eq 0 ]] ; then
   echo "INFO: PATH is already containing $HOME/bin."
 elif [[ $? -eq 1 ]] ; then
@@ -171,52 +171,17 @@ if [[ "$USER" == "pvoigt" ]] ; then
   alias gnus="emacs --geometry 80x40 -rv --no-splash -f gnus"
 fi
 
-# Linux specific aliases.
-if [[ `uname` == "Linux" ]] ; then
-  if [[ "$USER" == "root" ]] ; then
-    alias mnt_crypt_home="~root/bin/mnt_crypt.sh crypt.home"
-    alias umnt_crypt_home="~root/bin/umnt_crypt.sh crypt.home"
-    alias mnt_crypt_data="~root/bin/mnt_crypt.sh crypt.data"
-    alias umnt_crypt_data="~root/bin/umnt_crypt.sh crypt.data"
-    alias mnt_crypt_extern2="~root/bin/mnt_crypt.sh crypt.extern2"
-    alias umnt_crypt_extern2="~root/bin/umnt_crypt.sh crypt.extern2"
-    alias mnt_crypt_extern3="~root/bin/mnt_crypt.sh crypt.extern3"
-    alias umnt_crypt_extern3="~root/bin/umnt_crypt.sh crypt.extern3"
-    alias mnt_crypt_extern4="~root/bin/mnt_crypt.sh crypt.extern4"
-    alias umnt_crypt_extern4="~root/bin/umnt_crypt.sh crypt.extern4"
-    alias mnt_tcrypt_pv_address="~root/bin/mnt_tcrypt.sh tcrypt.pv_address"
-    alias umnt_tcrypt_pv_address="~root/bin/umnt_tcrypt.sh tcrypt.pv_address"
-    alias mnt_tcrypt_vog_tcvol="~root/bin/mnt_tcrypt.sh tcrypt.vog_tcvol"
-    alias umnt_tcrypt_vog_tcvol="~root/bin/umnt_tcrypt.sh tcrypt.vog_tcvol"
-  fi
+# gpg-agent of GnuPG 2.1:
+# Start gpg-agent to let SSH client use it.
+# gpg-connect-agent /bye
+# Make gpg-agent socket known to SSH client.
+if [[ -x "$(which gpgconf)" ]] ; then
+  export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 fi
-
-# FreeBSD specific aliases.
-if [[ `uname` == "FreeBSD" ]] ; then
-  if [[ "$USER" == "root" ]] ; then
-    alias mnt_geli_home="~root/bin/mnt_geli.sh crypt.home"
-    alias umnt_geli_home="~root/bin/umnt_geli.sh crypt.home"
-    alias mnt_geli_data="~root/bin/mnt_geli.sh crypt.data"
-    alias umnt_geli_data="~root/bin/umnt_geli.sh crypt.data"
-    alias mnt_geli_zhome="~root/bin/mnt_geli.sh crypt.zhome"
-    alias umnt_geli_zhome="~root/bin/umnt_geli.sh crypt.zhome"
-    alias mnt_geli_zdata="~root/bin/mnt_geli.sh crypt.zdata"
-    alias umnt_geli_zdata="~root/bin/umnt_geli.sh crypt.zdata"
-  fi
-fi
-
-# Environment variables of gpg-agent.
-if [[ -r ~/.gnupg/agent.info ]] ; then
-  echo "INFO: Reading file $HOME/.gnupg/agent.info."
-  source ~/.gnupg/agent.info
-  export GPG_AGENT_INFO
-  export SSH_AUTH_SOCK
-  export SSH_AGENT_PID
-  echo "INFO: GPG_AGENT_INFO=$GPG_AGENT_INFO."
-  echo "INFO: SSH_AUTH_SOCK=$SSH_AUTH_SOCK."
-  echo "INFO: SSH_AGENT_PID=$SSH_AGENT_PID."
-  echo
-fi
+# Set GPG TTY.
+export GPG_TTY=$(tty)
+# Refresh gpg-agent tty in case user switches into an X session.
+# gpg-connect-agent updatestartuptty /bye
 
 # Terminal title as <user>@<host>: <current_directory>.
 case $TERM in
@@ -228,9 +193,14 @@ esac
 # Greeting.
 ls -al
 echo
-echo Hello $USER, settings are: SHELL=$SHELL, TTY=$TTY, TERM=$TERM, LANG=$LANG.
+echo "Hello $USER, settings are: SHELL=$SHELL, TTY=$TTY, TERM=$TERM, LANG=$LANG."
 echo
 who -H -u
+echo
+if [[ -x "$(which tmux)" ]] ; then
+  echo "Listing of tmux sessions:"
+  tmux ls
+fi
 echo
 if [[ "$USER" == "pvoigt" ]] ; then
   if [[ "$TERM" == "xterm" || "$TERM" == "rxvt" ]] ; then
