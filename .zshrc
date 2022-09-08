@@ -1,7 +1,7 @@
 #
 # ~/.zshrc
 #
-# Last changes - Dr. Peter Voigt - 2017-09-18
+# Last changes - Dr. Peter Voigt - 2021-01-04
 #
 
 # History settings.
@@ -183,12 +183,34 @@ export GPG_TTY=$(tty)
 # Refresh gpg-agent tty in case user switches into an X session.
 # gpg-connect-agent updatestartuptty /bye
 
-# Terminal title as <user>@<host>: <current_directory>.
+# Terminal title.
 case $TERM in
-  xterm*)
-    precmd () {print -Pn "\e]0;%n@%m: %~\a"}
+  # Works for xterm* and rxct*
+  *)
+    # <user>@<host>: <current_directory>
+    # precmd () {print -Pn "\e]0;%n@%m: %~\a"}
+    # <user>@<host>
+    precmd () {print -Pn "\e]0;%n@%m\a"}
     ;;
 esac
+
+# Show git and svn branch in shell.
+setopt prompt_subst
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' actionformats \
+    '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
+zstyle ':vcs_info:*' formats       \
+    '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
+zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
+zstyle ':vcs_info:*' enable git cvs svn
+# or use pre_cmd, see man zshcontrib.
+vcs_info_wrapper() {
+  vcs_info
+  if [ -n "$vcs_info_msg_0_" ]; then
+    echo "%{$fg[grey]%}${vcs_info_msg_0_}%{$reset_color%}$del"
+  fi
+}
+RPROMPT=$'$(vcs_info_wrapper)'
 
 # Greeting.
 ls -al
