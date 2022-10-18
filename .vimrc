@@ -1,7 +1,7 @@
 "
 " $HOME/.vimrc
 "
-" Last changes - Dr. Peter Voigt - 2022-08-11
+" Last changes - Dr. Peter Voigt - 2022-10-18
 "
 let color="true"
 syntax on
@@ -12,15 +12,15 @@ set swapfile
 set dir=$HOME/tmp
 " set nonumber
 set number relativenumber
-set cursorline
-set cursorcolumn
+" set cursorline
+" set cursorcolumn
 :hi CursorLine   cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
 :hi CursorColumn cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
 " Use \c to toggle cursorline/cursorcolumn on and off.
 :nnoremap <Leader>c :set cursorline! cursorcolumn!
-" Use \c to toggle linenumbers/relativenumber on and off.
+" Use \d to toggle linenumbers/relativenumber on and off.
 :nnoremap <Leader>d :set number! relativenumber!
-set colorcolumn=80
+" set colorcolumn=80
 " set list
 set tabstop=4
 set expandtab
@@ -60,4 +60,4 @@ set printdevice=laser
 set printoptions+=paper:a4,duplex:off
 " Enable pasting from clipboard, requiring a clipboard enabled vim:
 " vim --version |grep clipboard
-set mouse=r
+set mouse=a
