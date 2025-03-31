@@ -1,0 +1,2 @@
+Testing PR, branch handling and merge options.
+A non-fast-forward mege (--non-ff) will always construct a merge commit.
